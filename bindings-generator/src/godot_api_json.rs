@@ -22,8 +22,8 @@ pub fn generate_json_if_needed() -> bool {
     let has_generate_bug = match godot_version::parse_godot_version(&version) {
         Ok(parsed) => {
             assert!(
-                parsed.major == 3 && parsed.minor >= 2,
-                "Only Godot versions >= 3.2 and < 4.0 are supported; found version {}.",
+                parsed.major == 3 && parsed.minor >= 1,
+                "Only Godot versions >= 3.1 and < 4.0 are supported; found version {}.",
                 version.trim()
             );
 
