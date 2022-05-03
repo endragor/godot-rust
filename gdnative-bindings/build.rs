@@ -12,7 +12,14 @@ fn main() {
         just_generated_api = gen::generate_json_if_needed();
         Path::new("api.json")
     });
-    let api_data = std::fs::read_to_string(api_json_path).expect("Unable to read api.json");
+    let api_data = std::fs::read_to_string(api_json_path).unwrap_or_else(|e| {
+        panic!(
+            "Unable to read api.json from {:?} while being in {:?}. {}",
+            api_json_var,
+            env::current_dir().unwrap(),
+            e
+        )
+    });
 
     let out_path = PathBuf::from(std::env::var("OUT_DIR").unwrap());
 
