@@ -1,13 +1,18 @@
 use gdnative_bindings_generator as gen;
 
+use std::env;
 use std::fs::File;
 use std::io::{BufWriter, Write as _};
 use std::path::{Path, PathBuf};
 
 fn main() {
-    let just_generated_api = gen::generate_json_if_needed();
-
-    let api_data = std::fs::read_to_string("api.json").expect("Unable to read api.json");
+    let mut just_generated_api = false;
+    let api_json_var = env::var_os("GODOT_API_JSON_PATH");
+    let api_json_path = api_json_var.as_ref().map(Path::new).unwrap_or_else(|| {
+        just_generated_api = gen::generate_json_if_needed();
+        Path::new("api.json")
+    });
+    let api_data = std::fs::read_to_string(api_json_path).expect("Unable to read api.json");
 
     let out_path = PathBuf::from(std::env::var("OUT_DIR").unwrap());
 
