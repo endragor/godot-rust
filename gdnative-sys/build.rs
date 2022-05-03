@@ -66,10 +66,10 @@ mod header_binding {
             "unsupported host architecture: build from x86_64 instead"
         );
 
-        let mut android_ndk_root: Option<PathBuf> = None;
+        let mut android_ndk_root: Option<PathBuf> = std::env::var_os("ANDROID_NDK_ROOT").map(PathBuf::from);
 
         let android_ndk_folder = Path::join(&android_sdk_root, "ndk");
-        if android_ndk_folder.exists() {
+        if android_ndk_root.is_none() && android_ndk_folder.exists() {
             // New NDK
             let available_ndk_versions: Vec<_> = std::fs::read_dir(android_ndk_folder.clone())
                 .unwrap()
